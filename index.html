@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Rooms</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0808 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(100, 100, 120, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 176, 0, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin-bottom: 3rem;
+            opacity: 0.7;
+        }
+
+        .doors-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .door {
+            width: 160px;
+            height: 240px;
+            border-radius: 80px 80px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .door:hover {
+            transform: translateY(-8px);
+        }
+
+        /* Younghyun's Door - Monotone */
+        .door.younghyun {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+            border: 1px solid #3a3a3a;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .door.younghyun:hover {
+            box-shadow: 0 15px 50px rgba(100, 100, 120, 0.3);
+            border-color: #4a4a4a;
+        }
+
+        /* Pai-chan's Door - Amber & Wine */
+        .door.paichan {
+            background: linear-gradient(180deg, #2a1a0a 0%, #1a1010 100%);
+            border: 1px solid #3d2a1a;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .door.paichan:hover {
+            box-shadow: 0 15px 50px rgba(255, 176, 0, 0.2);
+            border-color: #5a3a2a;
+        }
+
+        .door-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .door-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            opacity: 0.9;
+        }
+
+        .door-sublabel {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            margin-top: 0.5rem;
+        }
+
+        /* Glow effect for Pai-chan */
+        .door.paichan::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d49200, transparent);
+            opacity: 0.5;
+        }
+
+        /* Subtle line for Younghyun */
+        .door.younghyun::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #666, transparent);
+            opacity: 0.5;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 1.5rem;
+            font-size: 0.7rem;
+            opacity: 0.3;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 400px) {
+            .doors-container {
+                flex-direction: column;
+            }
+
+            .door {
+                width: 140px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title">SELECT A ROOM</h1>
+
+    <div class="doors-container">
+        <a href="Younghyun/" class="door younghyun">
+            <span class="door-icon">🐺</span>
+            <span class="door-label">Birdcage</span>
+            <span class="door-sublabel">Younghyun</span>
+        </a>
+
+        <a href="paichan/" class="door paichan">
+            <span class="door-icon">💋</span>
+            <span class="door-label">Secret Room</span>
+            <span class="door-sublabel">Pai-chan</span>
+        </a>
+    </div>
+
+    <div class="footer">PRIVATE ACCESS ONLY</div>
+</body>
+
+</html>
