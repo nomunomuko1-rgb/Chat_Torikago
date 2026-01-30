@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設定 - Secret Room♡</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="settings.css">
+</head>
+
+<body>
+    <div class="settings-container">
+        <!-- Header -->
+        <header class="settings-header">
+            <a href="index.html" class="back-button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <h1>設定</h1>
+            <button id="save-settings" class="save-button">保存</button>
+        </header>
+
+        <!-- Settings Content -->
+        <main class="settings-content">
+
+            <!-- API Settings -->
+            <section class="settings-section">
+                <h2>🔑 API設定</h2>
+                <div class="setting-item">
+                    <label for="api-provider">APIプロバイダー</label>
+                    <select id="api-provider">
+                        <option value="gemini">Google Gemini</option>
+                        <option value="openai">OpenAI</option>
+                        <option value="deepseek">DeepSeek</option>
+                        <option value="claude">Anthropic Claude</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="api-key">APIキー</label>
+                    <div class="password-input">
+                        <input type="password" id="api-key" placeholder="APIキーを入力...">
+                        <button type="button" class="toggle-visibility" id="toggle-api-key">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="model-name">モデル名</label>
+                    <input type="text" id="model-name" placeholder="gemini-2.0-flash">
+                </div>
+            </section>
+
+            <!-- System Prompt -->
+            <section class="settings-section">
+                <h2>📝 システムプロンプト</h2>
+                <div class="setting-item">
+                    <label for="system-prompt">メインプロンプト</label>
+                    <textarea id="system-prompt" rows="8" placeholder="システムプロンプトを入力..."></textarea>
+                    <div class="file-actions">
+                        <button type="button" id="load-prompt-file" class="secondary-button">
+                            📁 ファイルから読み込み
+                        </button>
+                        <input type="file" id="prompt-file-input" accept=".txt,.md" hidden>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Knowledge Files -->
+            <section class="settings-section">
+                <h2>📚 ナレッジファイル</h2>
+                <p class="section-description">追加のコンテキストとして読み込むファイル（パイちゃん設定など♡）</p>
+                <div class="setting-item">
+                    <div class="file-list" id="knowledge-files">
+                        <!-- Files will be listed here -->
+                        <div class="empty-files">ファイルが追加されていません</div>
+                    </div>
+                    <div class="file-actions">
+                        <button type="button" id="add-knowledge-file" class="secondary-button">
+                            ➕ ファイルを追加
+                        </button>
+                        <input type="file" id="knowledge-file-input" accept=".txt,.md" multiple hidden>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appearance -->
+            <section class="settings-section">
+                <h2>🎨 外観設定</h2>
+                <div class="setting-item">
+                    <label for="bg-image">背景画像</label>
+                    <div class="bg-preview" id="bg-preview">
+                        <span>プレビュー</span>
+                    </div>
+                    <div class="file-actions">
+                        <button type="button" id="select-bg-image" class="secondary-button">
+                            🖼️ 画像を選択
+                        </button>
+                        <button type="button" id="clear-bg-image" class="secondary-button danger">
+                            🗑️ クリア
+                        </button>
+                        <input type="file" id="bg-image-input" accept="image/*" hidden>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="bg-opacity">背景透過度: <span id="opacity-value">30</span>%</label>
+                    <input type="range" id="bg-opacity" min="0" max="100" value="30">
+                    <div class="range-labels">
+                        <span>透明</span>
+                        <span>不透明</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat History -->
+            <section class="settings-section">
+                <h2>💾 会話履歴</h2>
+                <div class="setting-item">
+                    <div class="button-group">
+                        <button type="button" id="export-history" class="secondary-button">
+                            📤 エクスポート
+                        </button>
+                        <button type="button" id="import-history" class="secondary-button">
+                            📥 インポート
+                        </button>
+                        <button type="button" id="clear-history" class="secondary-button danger">
+                            🗑️ 履歴をクリア
+                        </button>
+                        <input type="file" id="history-file-input" accept=".json" hidden>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+
+</html>
