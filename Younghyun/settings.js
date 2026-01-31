@@ -8,6 +8,7 @@ const apiProvider = document.getElementById('api-provider');
 const apiKey = document.getElementById('api-key');
 const toggleApiKey = document.getElementById('toggle-api-key');
 const modelName = document.getElementById('model-name');
+const thinkingBudget = document.getElementById('thinking-budget');
 const systemPrompt = document.getElementById('system-prompt');
 const loadPromptFile = document.getElementById('load-prompt-file');
 const promptFileInput = document.getElementById('prompt-file-input');
@@ -30,11 +31,14 @@ const STORAGE_KEYS = {
     API_PROVIDER: 'torikago_api_provider',
     API_KEY: 'torikago_api_key',
     MODEL_NAME: 'torikago_model_name',
+    THINKING_BUDGET: 'torikago_thinking_budget',
     SYSTEM_PROMPT: 'torikago_system_prompt',
     KNOWLEDGE_FILES: 'torikago_knowledge_files',
     BG_IMAGE: 'torikago_bg_image',
     BG_OPACITY: 'torikago_bg_opacity',
-    CONVERSATION: 'torikago_conversation'
+    CONVERSATION: 'torikago_conversation',
+    SESSIONS: 'torikago_sessions',
+    CURRENT_SESSION_ID: 'torikago_current_session_id'
 };
 
 // Knowledge files storage
@@ -76,6 +80,10 @@ function loadSettings() {
     const savedModel = localStorage.getItem(STORAGE_KEYS.MODEL_NAME);
     if (savedModel) modelName.value = savedModel;
 
+    // Thinking Budget
+    const savedThinkingBudget = localStorage.getItem(STORAGE_KEYS.THINKING_BUDGET);
+    thinkingBudget.value = savedThinkingBudget ? savedThinkingBudget : 0;
+
     // System Prompt
     const savedPrompt = localStorage.getItem(STORAGE_KEYS.SYSTEM_PROMPT);
     if (savedPrompt) systemPrompt.value = savedPrompt;
@@ -116,6 +124,7 @@ function saveSettings() {
         localStorage.setItem(STORAGE_KEYS.API_PROVIDER, apiProvider.value);
         localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey.value);
         localStorage.setItem(STORAGE_KEYS.MODEL_NAME, modelName.value);
+        localStorage.setItem(STORAGE_KEYS.THINKING_BUDGET, thinkingBudget.value);
         localStorage.setItem(STORAGE_KEYS.SYSTEM_PROMPT, systemPrompt.value);
         localStorage.setItem(STORAGE_KEYS.KNOWLEDGE_FILES, JSON.stringify(knowledgeFiles));
         localStorage.setItem(STORAGE_KEYS.BG_OPACITY, bgOpacity.value);
@@ -249,21 +258,24 @@ bgOpacity.addEventListener('input', () => {
 // ========================================
 
 exportHistory.addEventListener('click', () => {
-    const history = localStorage.getItem(STORAGE_KEYS.CONVERSATION);
-    if (!history) {
-        showToast('エクスポートする履歴がありません', 'error');
-        return;
-    }
+    // Export all chat data including sessions
+    const exportData = {
+        sessions: localStorage.getItem(STORAGE_KEYS.SESSIONS) || '[]',
+        currentSessionId: localStorage.getItem(STORAGE_KEYS.CURRENT_SESSION_ID) || '',
+        conversation: localStorage.getItem(STORAGE_KEYS.CONVERSATION) || '[]',
+        exportDate: new Date().toISOString(),
+        version: '1.0'
+    };
 
-    const blob = new Blob([history], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `torikago_history_${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `torikago_sessions_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast('履歴をエクスポートしました');
+    showToast('全てのチャット履歴をエクスポートしました');
 });
 
 importHistory.addEventListener('click', () => {

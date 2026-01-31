@@ -20,6 +20,11 @@
                 </div>
             </div>
             <div class="header-actions">
+                <button id="history-btn" class="header-button" title="履歴">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
                 <button id="new-chat-btn" class="header-button" title="新規チャット">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 5v14M5 12h14" />
@@ -35,6 +40,32 @@
             </div>
         </header>
 
+        <!-- History Panel -->
+        <div id="history-panel" class="history-panel">
+            <div class="history-header">
+                <h2>🐺 履歴</h2>
+                <button id="close-history-btn" class="history-close-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="history-search">
+                <input type="text" id="history-search-input" class="history-search-input" placeholder="🔍 チャットを検索...">
+            </div>
+            <div class="history-list" id="history-list">
+                <!-- History items will be inserted here -->
+            </div>
+            <div class="history-footer">
+                <button id="new-session-btn" class="new-session-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    新しいチャット
+                </button>
+            </div>
+        </div>
+
         <!-- Messages Area -->
         <main class="messages-area" id="messages">
             <!-- Messages will be inserted here -->
@@ -42,7 +73,24 @@
 
         <!-- Input Area -->
         <footer class="input-area">
+            <!-- Image Preview -->
+            <div id="image-preview-container" class="image-preview-container" style="display: none;">
+                <div class="image-preview-wrapper">
+                    <img id="image-preview" class="image-preview" src="" alt="Preview">
+                    <button id="remove-image-btn" class="remove-image-btn" title="画像を削除">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
             <div class="input-container">
+                <button id="attach-image-btn" class="attach-button" title="画像を添付">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                </button>
+                <input type="file" id="image-input" accept="image/*" hidden>
                 <textarea id="message-input" placeholder="メッセージを入力..." rows="1"></textarea>
                 <button id="send-btn" class="send-button">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
