@@ -8,6 +8,7 @@ const apiProvider = document.getElementById('api-provider');
 const apiKey = document.getElementById('api-key');
 const toggleApiKey = document.getElementById('toggle-api-key');
 const modelName = document.getElementById('model-name');
+const thinkingBudget = document.getElementById('thinking-budget');
 const systemPrompt = document.getElementById('system-prompt');
 const loadPromptFile = document.getElementById('load-prompt-file');
 const promptFileInput = document.getElementById('prompt-file-input');
@@ -30,11 +31,14 @@ const STORAGE_KEYS = {
     API_PROVIDER: 'paichan_api_provider',
     API_KEY: 'paichan_api_key',
     MODEL_NAME: 'paichan_model_name',
+    THINKING_BUDGET: 'paichan_thinking_budget',
     SYSTEM_PROMPT: 'paichan_system_prompt',
     KNOWLEDGE_FILES: 'paichan_knowledge_files',
     BG_IMAGE: 'paichan_bg_image',
     BG_OPACITY: 'paichan_bg_opacity',
-    CONVERSATION: 'paichan_conversation'
+    CONVERSATION: 'paichan_conversation',
+    SESSIONS: 'paichan_sessions',
+    CURRENT_SESSION_ID: 'paichan_current_session_id'
 };
 
 // Knowledge files storage
@@ -76,6 +80,10 @@ function loadSettings() {
     const savedModel = localStorage.getItem(STORAGE_KEYS.MODEL_NAME);
     if (savedModel) modelName.value = savedModel;
 
+    // Thinking Budget
+    const savedThinkingBudget = localStorage.getItem(STORAGE_KEYS.THINKING_BUDGET);
+    thinkingBudget.value = savedThinkingBudget ? savedThinkingBudget : 0;
+
     // System Prompt
     const savedPrompt = localStorage.getItem(STORAGE_KEYS.SYSTEM_PROMPT);
     if (savedPrompt) systemPrompt.value = savedPrompt;
@@ -113,6 +121,7 @@ function saveSettings() {
         localStorage.setItem(STORAGE_KEYS.API_PROVIDER, apiProvider.value);
         localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey.value);
         localStorage.setItem(STORAGE_KEYS.MODEL_NAME, modelName.value);
+        localStorage.setItem(STORAGE_KEYS.THINKING_BUDGET, thinkingBudget.value);
         localStorage.setItem(STORAGE_KEYS.SYSTEM_PROMPT, systemPrompt.value);
         localStorage.setItem(STORAGE_KEYS.KNOWLEDGE_FILES, JSON.stringify(knowledgeFiles));
         localStorage.setItem(STORAGE_KEYS.BG_OPACITY, bgOpacity.value);
@@ -246,21 +255,24 @@ bgOpacity.addEventListener('input', () => {
 // ========================================
 
 exportHistory.addEventListener('click', () => {
-    const history = localStorage.getItem(STORAGE_KEYS.CONVERSATION);
-    if (!history) {
-        showToast('エクスポートする履歴がありません', 'error');
-        return;
-    }
+    // Export all chat data including sessions
+    const exportData = {
+        sessions: localStorage.getItem(STORAGE_KEYS.SESSIONS) || '[]',
+        currentSessionId: localStorage.getItem(STORAGE_KEYS.CURRENT_SESSION_ID) || '',
+        conversation: localStorage.getItem(STORAGE_KEYS.CONVERSATION) || '[]',
+        exportDate: new Date().toISOString(),
+        version: '1.0'
+    };
 
-    const blob = new Blob([history], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `paichan_history_${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `paichan_sessions_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast('履歴をエクスポートしました♡');
+    showToast('全てのチャット履歴をエクスポートしました♡');
 });
 
 importHistory.addEventListener('click', () => {
@@ -274,9 +286,23 @@ historyFileInput.addEventListener('change', (e) => {
     const reader = new FileReader();
     reader.onload = (event) => {
         try {
-            JSON.parse(event.target.result); // Validate JSON
-            localStorage.setItem(STORAGE_KEYS.CONVERSATION, event.target.result);
-            showToast('履歴をインポートしました♡');
+            const data = JSON.parse(event.target.result);
+            
+            // Check if it's the new format with sessions
+            if (data.sessions) {
+                localStorage.setItem(STORAGE_KEYS.SESSIONS, data.sessions);
+                if (data.currentSessionId) {
+                    localStorage.setItem(STORAGE_KEYS.CURRENT_SESSION_ID, data.currentSessionId);
+                }
+                if (data.conversation) {
+                    localStorage.setItem(STORAGE_KEYS.CONVERSATION, data.conversation);
+                }
+                showToast('セッションデータをインポートしました♡');
+            } else {
+                // Old format - just conversation array
+                localStorage.setItem(STORAGE_KEYS.CONVERSATION, event.target.result);
+                showToast('履歴をインポートしました♡');
+            }
         } catch {
             showToast('無効なファイル形式です', 'error');
         }
@@ -285,9 +311,11 @@ historyFileInput.addEventListener('change', (e) => {
 });
 
 clearHistory.addEventListener('click', () => {
-    if (confirm('会話履歴を削除しますか？この操作は取り消せません。')) {
+    if (confirm('全てのチャット履歴（セッション含む）を削除しますか？この操作は取り消せません。')) {
         localStorage.removeItem(STORAGE_KEYS.CONVERSATION);
-        showToast('履歴をクリアしました');
+        localStorage.removeItem(STORAGE_KEYS.SESSIONS);
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_SESSION_ID);
+        showToast('全ての履歴をクリアしました');
     }
 });
 

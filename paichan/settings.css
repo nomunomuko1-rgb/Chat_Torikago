@@ -381,3 +381,32 @@
 .toast.error {
     background-color: #e74c3c;
 }
+
+/* ========================================
+   Setting Description
+   ======================================== */
+
+.setting-description {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: -8px;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.setting-item input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+}
+
+.setting-item input[type="number"]:focus {
+    border-color: var(--amber);
+    box-shadow: 0 0 0 2px rgba(255, 176, 0, 0.2);
+}

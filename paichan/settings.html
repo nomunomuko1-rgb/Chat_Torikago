@@ -53,6 +53,16 @@
                     <label for="model-name">モデル名</label>
                     <input type="text" id="model-name" placeholder="gemini-2.0-flash">
                 </div>
+                <div class="setting-item">
+                    <label for="thinking-budget">思考予算 (Thinking Budget)</label>
+                    <p class="setting-description">Gemini Thinkingモデルの思考深度（0-24576）。0で無効、高いほど詳細な思考。</p>
+                    <input type="number" id="thinking-budget" min="0" max="24576" value="0" placeholder="0">
+                    <div class="range-labels">
+                        <span>無効</span>
+                        <span>軽く</span>
+                        <span>詳細</span>
+                    </div>
+                </div>
             </section>
 
             <!-- System Prompt -->
